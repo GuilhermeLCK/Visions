@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Aluno\Respondes\" />
-    <Folder Include="DTOs\Emprestimo\Respondes\" />
-    <Folder Include="UseCases\Emprestimo\" />
   </ItemGroup>
 
 </Project>

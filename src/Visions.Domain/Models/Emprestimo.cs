@@ -14,7 +14,7 @@ namespace Visions.Domain.Models
         public long AlunoID { get; set; }   
         public long LivroID { get; set; }
 
-        public virtual  Aluno Aluno { get; set; }
+        public virtual Aluno Aluno { get; set; }
         public virtual Livro Livro { get; set; }
 
     }

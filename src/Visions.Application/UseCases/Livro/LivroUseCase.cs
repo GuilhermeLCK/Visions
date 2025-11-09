@@ -26,13 +26,6 @@ namespace Visions.Application.UseCases.Livro
             if (!validate.Success)
                 return new GerericResponse(validate.Success, validate.Messages);
 
-            var livroJaExiste = await _livroRepository.GetExistByIsbnAsync(resquest.ISBN);
-
-            if (livroJaExiste != null)
-            {
-                return new GerericResponse(false, new List<string> { "Já existe um livro cadastrado com esse ISBN" });
-            }
-
             var livro = _mapper.Map<Domain.Models.Livro>(resquest);
 
             await _livroRepository.AddAsync(livro);
@@ -44,8 +37,7 @@ namespace Visions.Application.UseCases.Livro
         }
         public async Task<GerericResponse<List<LivroListDTO>>> GetAll(LivroFiltersDTO filters)
         {
-
-            List<Domain.Models.Livro> livros = await _livroRepository.GetByFilterAsync(filters.Titulo, filters.Autor, filters.Isbn);
+            List<Domain.Models.Livro> livros = await _livroRepository.GetByFiltersAsync(filters.Titulo, filters.Autor, filters.Isbn);
             var livrosFiltrados = _mapper.Map<List<LivroListDTO>>(livros);
             var response = new GerericResponse<List<LivroListDTO>>(livrosFiltrados, true);
             return response;
@@ -53,7 +45,7 @@ namespace Visions.Application.UseCases.Livro
         }
         public async Task<GerericResponse<List<LivroListDTO>>> GetAvailable()
         {
-            List<Domain.Models.Livro> livrosDisponiveis = await _livroRepository.GetAvailablesAsync();
+            List<Domain.Models.Livro> livrosDisponiveis = await _livroRepository.GetavailablesAsync();
             var livrosFiltrados = _mapper.Map<List<LivroListDTO>>(livrosDisponiveis);
             var response = new GerericResponse<List<LivroListDTO>>(livrosFiltrados, true);
             return response;

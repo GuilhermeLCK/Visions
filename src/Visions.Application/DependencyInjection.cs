@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Visions.Application.Services;
 using Visions.Application.UseCases.Aluno;
+using Visions.Application.UseCases.Emprestimo;
 using Visions.Application.UseCases.Livro;
 
 namespace Visions.Application
@@ -16,7 +17,7 @@ namespace Visions.Application
         {
             services.AddScoped<ILivroUseCase, LivroUseCase>();
             services.AddScoped<IAlunoUseCase, AlunoUseCase>();
-
+            services.AddScoped<IEmprestimoUseCase, EmprestimoUseCase>();
         }
 
         private static void AddMapper(IServiceCollection services)

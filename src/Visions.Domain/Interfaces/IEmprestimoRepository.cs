@@ -6,8 +6,10 @@ namespace Visions.Domain.Interfaces
     {
         public Task AddAsync(Emprestimo emprestimo);
         public Task AddUpdateAsync(Emprestimo emprestimo);
-        public Task<List<Emprestimo>> GetAllAssetsByAlunoId(long  alunoId);
-        public Task<Emprestimo> GetById(long emprestimoId);
-
+        public Task<Emprestimo> GetByIdAsync(long emprestimoId);
+        public Task<List<Emprestimo>> GetAssetsByAlunoIdAsync(long  alunoId);
+        Task<List<object>> GetTopAsync();
+        Task<List<object>> GetDelayedLoansAsync(long? id = null);
+        Task<List<object>> GetHistoryByPeriodAsync(DateTime? inicio, DateTime? fim);
     }
 }

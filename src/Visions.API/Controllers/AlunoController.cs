@@ -24,6 +24,6 @@ namespace Visions.API.Controllers
                 return BadRequest(ex.Message);
             }
 
-        }
+        }     
     }
 }

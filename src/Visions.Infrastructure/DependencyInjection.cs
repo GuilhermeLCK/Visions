@@ -30,6 +30,8 @@ namespace Visions.Infrastructure
             services.AddScoped<ILivroRepository, LivroRepository>();    
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAlunoRepository, AlunoRepository>();
+            services.AddScoped<IEmprestimoRepository, EmprestimoRepository>();
+
 
         }
         private static void AddFluenteMigration(IServiceCollection services, IConfiguration configuration)

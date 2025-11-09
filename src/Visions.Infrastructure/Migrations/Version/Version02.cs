@@ -14,7 +14,7 @@ namespace Visions.Infrastructure.Migrations.Version
                 .WithColumn("Email").AsString(150).NotNullable()
                 .WithColumn("Matricula").AsString(50).NotNullable()
                 .WithColumn("Curso").AsString(100).NotNullable()
-                .WithColumn("Status").AsBoolean().NotNullable().WithDefaultValue(true);
+                .WithColumn("Ativo").AsBoolean().NotNullable().WithDefaultValue(true);
         }
     }
 }

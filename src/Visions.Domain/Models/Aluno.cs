@@ -10,7 +10,7 @@ namespace Visions.Domain.Models
         public string Email { get; set; } = string.Empty;
         public string Matricula { get; set; } = string.Empty; 
         public string Curso { get; set; } = string.Empty;
-        public bool Status { get; set; } = true;  
+        public bool Ativo { get; set; } = true;  
 
     }
 }

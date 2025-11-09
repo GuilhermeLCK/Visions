@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Visions.Domain.Interfaces;
 using Visions.Domain.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Visions.Infrastructure.Database.Repositories
 {
@@ -15,13 +14,11 @@ namespace Visions.Infrastructure.Database.Repositories
         {
             await _context.Livros.AddAsync(livro);
         }
-
-        public async Task<Livro> GetExistByIsbnAsync(string isbn)
+        public async Task UpdateAsync(Livro livro)
         {
-            return await _context.Livros.FirstOrDefaultAsync(f => f.ISBN == isbn);     
+            _context.Livros.Update(livro);
         }
-
-        public async Task<List<Livro>> GetByFilterAsync(string? titulo, string? autor, string? isbn)
+        public async Task<List<Livro>> GetByFiltersAsync(string? titulo, string? autor, string? isbn)
         {
             var query = _context.Livros.AsQueryable();
 
@@ -35,11 +32,16 @@ namespace Visions.Infrastructure.Database.Repositories
                 query = query.Where(w => w.ISBN.Contains(isbn));
 
             return await query.ToListAsync();
-        }
-        public Task<List<Livro>> GetAvailablesAsync()
+        }  
+        public Task<List<Livro>> GetavailablesAsync()
         {
             return _context.Livros.Where(w => w.QuantidadeDisponivel != 0).ToListAsync();
         }
+        public async Task<Livro> GetById(long livroId)
+        {
+            return await _context.Livros.FirstOrDefaultAsync(f => f.Id == livroId && f.QuantidadeDisponivel > 0);
+        }    
+
     }
 
 
