@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Visions.Application.DTOs.Aluno.Requests;
-using Visions.Application.UseCases.Aluno.Register;
+using Visions.Application.UseCases.Aluno;
 
 namespace Visions.API.Controllers
 {
@@ -14,7 +14,7 @@ namespace Visions.API.Controllers
         {
             try
             {
-                var resultado = await useCase.Execute(resquest);
+                var resultado = await useCase.Register(resquest);
                 if (resultado.Success)
                     return Created(string.Empty, resultado);
                 else return BadRequest(resultado);

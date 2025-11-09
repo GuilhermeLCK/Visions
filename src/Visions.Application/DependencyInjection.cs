@@ -1,9 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Visions.Application.Services;
-using Visions.Application.UseCase.Livro.Cadastrar;
-using Visions.Application.UseCases.Aluno.Register;
-using Visions.Application.UseCases.Livro.Listing;
-using Visions.Application.UseCases.Livro.Register;
+using Visions.Application.UseCases.Aluno;
+using Visions.Application.UseCases.Livro;
 
 namespace Visions.Application
 {
@@ -17,7 +15,6 @@ namespace Visions.Application
         private static void AddUseCase(IServiceCollection services)
         {
             services.AddScoped<ILivroUseCase, LivroUseCase>();
-            services.AddScoped<ILivroListingUseCase, LivroListingUseCase>();
             services.AddScoped<IAlunoUseCase, AlunoUseCase>();
 
         }

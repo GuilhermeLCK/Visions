@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Visions.Application.DTOs;
 using Visions.Application.DTOs.Livro.Requests;
-using Visions.Application.UseCases.Livro.Listing;
-using Visions.Application.UseCases.Livro.Register;
-using Visions.Domain.Interfaces;
+using Visions.Application.UseCases.Livro;
 namespace Visions.API.Controllers
 {
     [Route("livros")]
@@ -16,7 +13,7 @@ namespace Visions.API.Controllers
         {   
             try
             {
-                var resultado = await useCase.Execute(resquest);
+                var resultado = await useCase.Register(resquest);
                 if (resultado.Success)
                     return Created(string.Empty, resultado);
                 else return BadRequest(resultado);
@@ -28,16 +25,15 @@ namespace Visions.API.Controllers
            
         }
 
-
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll([FromServices] ILivroListingUseCase useCase, [FromQuery] LivroFiltersDTO filters)
+        public async Task<IActionResult> GetAll([FromServices] ILivroUseCase useCase, [FromQuery] LivroFiltersDTO filters)
         {
             try
             {
-                var resultado = await useCase.ExecuteAll(filters);
+                var resultado = await useCase.GetAll(filters);
                 if (resultado.Success)
-                    return Created(string.Empty, resultado);
+                    return Ok(resultado);
                 else return BadRequest(resultado);
 
             }
@@ -48,16 +44,14 @@ namespace Visions.API.Controllers
 
         }
 
-
-        [HttpGet("disponiveis")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAvailable([FromServices] ILivroListingUseCase useCase)
+        [HttpGet("disponiveis")] 
+        public async Task<IActionResult> GetAvailable([FromServices] ILivroUseCase useCase)
         {
             try
             {
-                var resultado = await useCase.ExecuteAvailable();
+                var resultado = await useCase.GetAvailable();
                 if (resultado.Success)
-                    return Created(string.Empty, resultado);
+                    return Ok(resultado);
                 else return BadRequest(resultado);
 
             }

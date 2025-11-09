@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Visions.Application.DTOs;
 using Visions.Application.DTOs.Aluno.Requests;
 using Visions.Domain.Interfaces;
+using Visions.Domain.Models;
 
-namespace Visions.Application.UseCases.Aluno.Register
+namespace Visions.Application.UseCases.Aluno
 {
     class AlunoUseCase : IAlunoUseCase
     {
@@ -18,7 +18,7 @@ namespace Visions.Application.UseCases.Aluno.Register
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<GerericResponse> Execute(AlunoRegisterDTO resquest)
+        public async Task<GerericResponse> Register(AlunoRegisterDTO resquest)
         {
             var validate = Validate(resquest);
 
@@ -38,7 +38,7 @@ namespace Visions.Application.UseCases.Aluno.Register
 
         }
 
-        private  string GerarMatricula()
+        private string GerarMatricula()
         {
             return $"MAT-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
 

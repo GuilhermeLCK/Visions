@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Visions.Application.DTOs.Livro.Requests;
 
-namespace Visions.Application.UseCase.Livro.Register
+namespace Visions.Application.UseCases.Livro
 {
     public class LivroValidator : AbstractValidator<LivroRegisterDTO>
     {

@@ -1,4 +1,4 @@
-﻿namespace Visions.Application.DTOs
+﻿namespace Visions.Domain.Models
 {
     public class GerericResponse
     {
@@ -21,5 +21,4 @@
             Data = data;
         }
     }
-
 }

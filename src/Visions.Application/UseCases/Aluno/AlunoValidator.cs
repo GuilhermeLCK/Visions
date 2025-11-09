@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Visions.Application.DTOs.Aluno.Requests;
 
-namespace Visions.Application.UseCases.Aluno.Register
+namespace Visions.Application.UseCases.Aluno
 {
     class AlunoValidator : AbstractValidator<AlunoRegisterDTO>
     {
