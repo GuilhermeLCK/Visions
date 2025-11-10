@@ -1,4 +1,4 @@
-# Visions Library API
+# Visions API
 
 API REST para gerenciamento de acervo e empréstimos de uma biblioteca universitária.
 
@@ -18,7 +18,6 @@ API REST para gerenciamento de acervo e empréstimos de uma biblioteca universit
 ## Como Executar
 
 1. **Clone o repositório:**
-
    
 2. **Acesse a pasta do projeto:**
    
