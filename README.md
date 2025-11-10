@@ -32,7 +32,7 @@ API REST para gerenciamento de acervo e empréstimos de uma biblioteca universit
 4. **Execute a API (as migrations já iram executar):**
    
 6. **Acesse a documentação Swagger:**
-   - Acesse `http://localhost:5000/swagger` (ou a porta configurada) para visualizar os endpoints.
+   - Acesse `http://localhost:7296/swagger` (ou a porta configurada) para visualizar os endpoints.
 
 ## Observações
 
