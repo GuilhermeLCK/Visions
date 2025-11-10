@@ -35,8 +35,7 @@ namespace Visions.Infrastructure.Database.Repositories
         {
            return await _context.Emprestimos.FirstOrDefaultAsync(e => e.Id == emprestimoId);      
         }
-
-        public async Task<List<object>> GetDelayedLoansAsync(long? id = null)
+        public async Task<List<T>> GetDelayedLoansAsync<T>(long? alunoId = null)
         {
             DateTime hoje = DateTime.Now;
 
@@ -45,10 +44,10 @@ namespace Visions.Infrastructure.Database.Repositories
                 .Include(e => e.Livro)
                 .Where(e => e.DataPrevistaDevolucao < hoje && e.DataDevolucaoReal == null);
 
-            if (id.HasValue)
-                query = query.Where(e => e.AlunoID == id.Value);
+            if (alunoId.HasValue)
+                query = query.Where(e => e.AlunoID == alunoId.Value);
 
-            return await query
+            var result = await query
                 .Select(e => new
                 {
                     Aluno = e.Aluno.Nome,
@@ -57,61 +56,79 @@ namespace Visions.Infrastructure.Database.Repositories
                     DataPrevistaDevolucao = e.DataPrevistaDevolucao,
                     DiasAtraso = EF.Functions.DateDiffDay(e.DataPrevistaDevolucao, hoje)
                 })
-                .OrderByDescending(e => e.DiasAtraso)
-                .ToListAsync<object>();
+                .ToListAsync();
+
+            return result.Select(item => MapTo<T>(item)).ToList();
         }
 
-
-        public async Task<List<object>> GetHistoryByPeriodAsync(DateTime? inicio, DateTime? fim)
+        public async Task<List<T>> GetHistoryByPeriodAsync<T>(DateTime? inicio, DateTime? fim)
         {
             var query = _context.Emprestimos
                 .Include(e => e.Aluno)
                 .Include(e => e.Livro)
                 .AsQueryable();
 
-            query = query.Where(e =>
-               (!inicio.HasValue || e.DataEmprestimo.Date >= inicio.Value.Date) &&
-               (!fim.HasValue || e.DataEmprestimo.Date <= fim.Value.Date)
-            );
+            if (inicio.HasValue)
+                query = query.Where(e => e.DataEmprestimo.Date >= inicio.Value.Date);
 
-            return await query
+            if (fim.HasValue)
+                query = query.Where(e => e.DataEmprestimo.Date <= fim.Value.Date);
+
+            var result = await query
                 .Select(e => new
                 {
                     Aluno = e.Aluno.Nome,
                     Livro = e.Livro.Titulo,
                     DataEmprestimo = e.DataEmprestimo,
-                    DataDevolucao = e.DataDevolucaoReal,
+                    DataPrevistaDevolucao = e.DataPrevistaDevolucao,
                     Status = e.Status
                 })
-                .OrderBy(e => e.DataEmprestimo)
-                .ToListAsync<object>();
+                .ToListAsync();
+
+            return result.Select(item => MapTo<T>(item)).ToList();
         }
-
-
-        public async Task<List<object>> GetTopAsync()
+        public async Task<List<T>> GetTopAsync<T>()
         {
-            return await _context.Emprestimos
-                 .Include(e => e.Livro)
-                 .Include(e => e.Aluno)
-                 .GroupBy(e => new { e.LivroID, e.Livro.Titulo })
-                 .Select(g => new
-                 {
-                     Livro = g.Key.Titulo,
-                     TotalEmprestimos = g.Count(),
-                     PrimeiroAluno = g.OrderBy(e => e.DataEmprestimo)
-                                      .Select(e => e.Aluno.Nome)
-                                      .FirstOrDefault(),
-                     UltimoAluno = g.OrderByDescending(e => e.DataEmprestimo)
-                                    .Select(e => e.Aluno.Nome)
-                                    .FirstOrDefault(),
-                     AlunoMaisFrequente = g.GroupBy(e => e.Aluno.Nome)
-                                           .OrderByDescending(a => a.Count())
-                                           .Select(a => a.Key)
-                                           .FirstOrDefault()
-                 })
-                 .OrderByDescending(r => r.TotalEmprestimos)
-                 .Take(10)
-                 .ToListAsync<object>();
+            var query = await _context.Emprestimos
+                .Include(e => e.Livro)
+                .Include(e => e.Aluno)
+                .GroupBy(e => new { e.LivroID, e.Livro.Titulo })
+                .Select(g => new
+                {
+                    Livro = g.Key.Titulo,
+                    TotalEmprestimos = g.Count(),
+                    PrimeiroAluno = g.OrderBy(e => e.DataEmprestimo)
+                                     .Select(e => e.Aluno.Nome)
+                                     .FirstOrDefault(),
+                    UltimoAluno = g.OrderByDescending(e => e.DataEmprestimo)
+                                   .Select(e => e.Aluno.Nome)
+                                   .FirstOrDefault(),
+                    AlunoMaisFrequente = g.GroupBy(e => e.Aluno.Nome)
+                                          .OrderByDescending(a => a.Count())
+                                          .Select(a => a.Key)
+                                          .FirstOrDefault()
+                })
+                .OrderByDescending(r => r.TotalEmprestimos)
+                .Take(10)
+                .ToListAsync();
+
+            return query.Select(item => MapTo<T>(item)).ToList();
         }
+        private static T MapTo<T>(object source)
+        {
+            var target = Activator.CreateInstance<T>();
+            var sourceProps = source.GetType().GetProperties();
+            var targetProps = typeof(T).GetProperties();
+
+            foreach (var s in sourceProps)
+            {
+                var t = targetProps.FirstOrDefault(p => p.Name == s.Name && p.PropertyType == s.PropertyType);
+                if (t != null)
+                    t.SetValue(target, s.GetValue(source));
+            }
+
+            return target;
+        }
+
     }
 }

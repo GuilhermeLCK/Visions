@@ -90,22 +90,22 @@ namespace Visions.Application.UseCases.Emprestimo
         }
 
 
-        public async Task<GerericResponse<List<object>>> GetTop()
+        public async Task<GerericResponse<List<EmprestimoTopDTO>>> GetTop()
         {
-            var emprestimos = await _emprestimoRepository.GetTopAsync();
-            return new GerericResponse<List<object>>(emprestimos, true);
+            var result = await _emprestimoRepository.GetTopAsync<EmprestimoTopDTO>();
+            return new GerericResponse<List<EmprestimoTopDTO>>(result, true);
         }
 
-        public async Task<GerericResponse<List<object>>> GetDelayedLoans()
+        public async Task<GerericResponse<List<EmprestimoAtrasadoDTO>>> GetDelayedLoans()
         {
-            var emprestimos = await _emprestimoRepository.GetDelayedLoansAsync();
-            return new GerericResponse<List<object>>(emprestimos, true);
+            var emprestimos = await _emprestimoRepository.GetDelayedLoansAsync<EmprestimoAtrasadoDTO>();
+            return new GerericResponse<List<EmprestimoAtrasadoDTO>>(emprestimos, true);
         }
 
-        public async Task<GerericResponse<List<object>>> GetHistoryByPeriod(DateTime? inicio, DateTime? fim)
+        public async Task<GerericResponse<List<EmprestimoHistoricoDTO>>> GetHistoryByPeriod(DateTime? inicio, DateTime? fim)
         {
-            var emprestimos = await _emprestimoRepository.GetHistoryByPeriodAsync(inicio, fim);
-            return new GerericResponse<List<object>>(emprestimos, true);
+            var emprestimos = await _emprestimoRepository.GetHistoryByPeriodAsync<EmprestimoHistoricoDTO>(inicio, fim);
+            return new GerericResponse<List<EmprestimoHistoricoDTO>>(emprestimos, true);
         }
 
 
@@ -142,9 +142,9 @@ namespace Visions.Application.UseCases.Emprestimo
             if (emprestimoPorAluno.Count >= 3)
                 return new GerericResponse(false, new List<string> { "Aluno já possui 3 empréstimos ativos." });
 
-            var emprestimosEmAtraso = await _emprestimoRepository.GetDelayedLoansAsync(resquest.AlunoID);
+            var emprestimosPendentes = await _emprestimoRepository.GetDelayedLoansAsync<EmprestimoAtrasadoDTO>(resquest.AlunoID);
 
-            if(emprestimosEmAtraso.Any())
+            if (emprestimosPendentes.Any())
                 return new GerericResponse(false, new List<string> { "Aluno possui empréstimos em atraso." });  
 
 

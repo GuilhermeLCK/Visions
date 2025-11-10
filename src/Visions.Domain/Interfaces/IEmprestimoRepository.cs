@@ -1,4 +1,5 @@
-﻿using Visions.Domain.Models;
+﻿using NPOI.SS.Formula.Functions;
+using Visions.Domain.Models;
 
 namespace Visions.Domain.Interfaces
 {
@@ -8,8 +9,8 @@ namespace Visions.Domain.Interfaces
         public Task AddUpdateAsync(Emprestimo emprestimo);
         public Task<Emprestimo> GetByIdAsync(long emprestimoId);
         public Task<List<Emprestimo>> GetAssetsByAlunoIdAsync(long  alunoId);
-        Task<List<object>> GetTopAsync();
-        Task<List<object>> GetDelayedLoansAsync(long? id = null);
-        Task<List<object>> GetHistoryByPeriodAsync(DateTime? inicio, DateTime? fim);
+        Task<List<T>> GetTopAsync<T>();
+        Task<List<T>> GetDelayedLoansAsync<T>(long? alunoId = null);
+        Task<List<T>> GetHistoryByPeriodAsync<T>(DateTime? inicio, DateTime? fim);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Visions.Application.DTOs.Emprestimo.Requests;
+﻿using NPOI.SS.Formula.Functions;
+using Visions.Application.DTOs.Emprestimo.Requests;
 using Visions.Application.DTOs.Emprestimo.Respondes;
 using Visions.Domain.Models;
 
@@ -9,9 +10,9 @@ namespace Visions.Application.UseCases.Emprestimo
         Task<GerericResponse> Register(EmprestimoRegisterDTO resquest);
         Task<GerericResponse> Return(long emprestimoId);
         Task<GerericResponse<List<EmprestimoListDTO>>> GetActivesByAluno(long alunoId);
-        Task<GerericResponse<List<object>>> GetTop();
-        Task<GerericResponse<List<object>>> GetHistoryByPeriod(DateTime? inicio, DateTime? fim);
-        Task<GerericResponse<List<object>>> GetDelayedLoans();
+        Task<GerericResponse<List<EmprestimoTopDTO>>> GetTop();
+        Task<GerericResponse<List<EmprestimoHistoricoDTO>>> GetHistoryByPeriod(DateTime? inicio, DateTime? fim);
+        Task<GerericResponse<List<EmprestimoAtrasadoDTO>>> GetDelayedLoans();
 
     }
 }
